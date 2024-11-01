@@ -9,12 +9,6 @@ const Root = () => {
     return (
         <>
             <div className='w-10/12 mx-auto'>
-                <ToastContainer position="top-center"
-                    autoClose={1500}
-                    hideProgressBar={false}
-                    closeOnClick={true}
-                    pauseOnHover={true}
-                    draggable={true} />
                 <Navbar></Navbar>
                 <Outlet></Outlet>
             </div>

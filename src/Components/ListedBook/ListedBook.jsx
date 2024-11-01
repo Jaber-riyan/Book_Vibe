@@ -5,11 +5,14 @@ import ReadList from './ReadList/ReadList';
 import WishList from './WishList/WishList'
 import { useLoaderData } from 'react-router-dom';
 import { getStoredReadList, getStoredWishList } from '../../Utilities/addToDb';
+import { toast } from 'react-toastify';
 
 const ListedBook = () => {
 
     const [readBooks, setReadBooks] = useState([]);
     const [wishBooks, setWishBooks] = useState([]);
+    const [sort, setSort] = useState();
+    const [pathOfList, setPathOfList] = useState('read books');
 
     const books = useLoaderData();
 
@@ -24,19 +27,83 @@ const ListedBook = () => {
         setWishBooks(findWishBooksList);
     }, [])
 
+
+    const handleSort = sortType => {
+        setSort(sortType);
+        if (pathOfList === 'read books') {
+            if (sortType === 'Rating') {
+                const newSortedReadList = [...readBooks].sort((a, b) => b.rating - a.rating);
+                setReadBooks(newSortedReadList);
+                toast.success('Sorted Read List By "Rating"');
+            }
+            else if (sortType === 'Number of pages') {
+                const newSortedReadList = [...readBooks].sort((a, b) => b.totalPages - a.totalPages);
+                setReadBooks(newSortedReadList);
+                toast.success('Sorted Read List By "Number of pages"');
+
+            }
+            else if (sortType === 'Publisher year') {
+                const newSortedReadList = [...readBooks].sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
+                setReadBooks(newSortedReadList);
+                toast.success('Sorted Read List By "Publisher year"');
+            }
+        }
+        else if (pathOfList === 'wishlist books') {
+            if (sortType === 'Rating') {
+                const newSortedReadList = [...wishBooks].sort((a, b) => b.rating - a.rating);
+                setWishBooks(newSortedReadList);
+                toast.success('Sorted Wish List By "Rating"');
+            }
+            else if (sortType === 'Number of pages') {
+                const newSortedReadList = [...wishBooks].sort((a, b) => b.totalPages - a.totalPages);
+                setWishBooks(newSortedReadList);
+                toast.success('Sorted Wish List By "Number of pages"');
+            }
+            else if (sortType === 'Publisher year') {
+                const newSortedReadList = [...wishBooks].sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
+                setWishBooks(newSortedReadList);
+                toast.success('Sorted Read List By "Publisher year"');
+            }
+        }
+    }
+
+    const handlePathList = path => {
+        setPathOfList(path);
+    }
+
     return (
         <div className='work-sans'>
             <div className='bg-[#1313130D] py-7 rounded-xl mb-8'>
                 <h2 className='text-[#131313] font-bold text-3xl text-center'>Books</h2>
             </div>
             <div className='flex justify-center mb-12'>
-                <button className="mr-5 rounded-lg py-4 px-5 bg-[#23BE0A] text-white font-semibold">Sort By</button>
+                <details className="dropdown">
+                    <summary className="mr-5 rounded-lg py-4 px-10 bg-[#23BE0A] text-white font-semibold cursor-pointer">
+                        {
+                            sort ? `${sort}` : 'Sort By'
+                        }
+                    </summary>
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-44 p-2 shadow bg-[#22be0ab9] text-white font-bold tex-xl">
+                        <li onClick={() => handleSort('Rating')}><a>Rating</a></li>
+                        <li onClick={() => handleSort('Number of pages')}><a>
+                            Number of pages</a></li>
+                        <li onClick={() => handleSort('Publisher year')}><a>Publisher year</a></li>
+                    </ul>
+                </details>
             </div>
             <div>
                 <Tabs>
                     <TabList>
-                        <Tab>Read Books</Tab>
-                        <Tab>Wishlist Books</Tab>
+                        <Tab><h1 onClick={() => handlePathList('read books')} className='text-xl font-semibold'>
+                            {
+                                pathOfList === 'read books' ? '* ' : ''
+                            }
+                            Read Books</h1></Tab>
+                        <Tab><h1 onClick={() => handlePathList('wishlist books')} className='text-xl font-semibold'>
+                            {
+                                pathOfList === 'wishlist books' ? '* ' : ''
+                            }
+                            Wishlist Books</h1></Tab>
                     </TabList>
 
                     <TabPanel>
@@ -46,7 +113,7 @@ const ListedBook = () => {
                     </TabPanel>
                     <TabPanel>
                         {
-                            wishBooks.map(book => <WishList  key={book.bookId} book={book}></WishList>)
+                            wishBooks.map(book => <WishList key={book.bookId} book={book}></WishList>)
                         }
                     </TabPanel>
                 </Tabs>
