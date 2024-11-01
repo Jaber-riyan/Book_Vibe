@@ -83,7 +83,7 @@ const ListedBook = () => {
                             sort ? `${sort}` : 'Sort By'
                         }
                     </summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-44 p-2 shadow bg-[#22be0ab9] text-white font-bold tex-xl">
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li onClick={() => handleSort('Rating')}><a>Rating</a></li>
                         <li onClick={() => handleSort('Number of pages')}><a>
                             Number of pages</a></li>
