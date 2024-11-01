@@ -1,4 +1,4 @@
-
+import { toast } from 'react-toastify';
 // read list functionality
 
 const getStoredReadList = () => {
@@ -15,7 +15,7 @@ const getStoredReadList = () => {
 const addToStoredReadList = (id) => {
     const storedList = getStoredReadList();
     if (storedList.includes(id)) {
-        alert("Already exists in read list!!")
+        toast.error('Already exists in read list!!')
     }
     else {
         storedList.push(id);
@@ -41,8 +41,11 @@ const getStoredWishList = () => {
 const addToStoredWishList = (id) => {
     const storedList = getStoredWishList();
     const storedListRead = getStoredReadList();
-    if (storedList.includes(id) || storedListRead.includes(id)) {
-        alert("Already exists in wish list!!")
+    if (storedList.includes(id)) {
+        toast.error("Already exists in wish list!!")
+    }
+    else if(storedListRead.includes(id)) {
+        toast.error(`Already exists in read list`);
     }
     else {
         storedList.push(id);
